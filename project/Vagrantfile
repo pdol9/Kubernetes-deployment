@@ -1,25 +1,25 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = "hashicorp/bionic64" 
-  config.vm.box_url = "https://vagrantcloud.com/hashicorp/bionic64"
+  config.vm.box = "rockylinux/9" 
 
-  config.vm.define "pdolS" do |control|
-    control.vm.hostname = "pdolS"
-    control.vm.network "private_network", ip: "192.168.56.110"
-    control.vm.provider "virtualbox" do |v|
+  config.vm.define "pS" do |server|
+    server.vm.hostname = "pS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.provider "virtualbox" do |v|
       v.memory = 512
       v.cpus = 1
-      v.customize ["modifyvm", :id, "--name", "pdolS"]
+      v.customize ["modifyvm", :id, "--name", "pS"]
     end
-    config.vm.provision "shell", path: "controller-installer.sh"
+    server.vm.provision "shell", path: "server-installer.sh"
   end
-  config.vm.define "pdolSW" do |control|
-    control.vm.hostname = "pdolSW"
-    control.vm.network "private_network", ip: "192.168.56.111"
-    control.vm.provider "virtualbox" do |v|
+
+  config.vm.define "pSW" do |agent|
+    agent.vm.hostname = "pSW"
+    agent.vm.network "private_network", ip: "192.168.56.111"
+    agent.vm.provider "virtualbox" do |v|
       v.memory = 512
       v.cpus = 1
-      v.customize ["modifyvm", :id, "--name", "pdolSW"]
+      v.customize ["modifyvm", :id, "--name", "pSW"]
     end
-    config.vm.provision "shell", path: "agent-installer.sh"
+    agent.vm.provision "shell", path: "agent-installer.sh"
   end
 end
